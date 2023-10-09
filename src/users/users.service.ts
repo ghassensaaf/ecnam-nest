@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { log } from 'console';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreateUserInput } from 'src/graphql';
 import { PasswordUtils } from 'src/utils/password.utils';
@@ -30,7 +29,6 @@ export class UsersService {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         // This error is specific to Prisma and might contain more information
         // You can log it or handle it as needed
-        log(error)
         console.error('Prisma error:', error.message);
         throw new Error('An error occurred while creating the user.');
       } else {
