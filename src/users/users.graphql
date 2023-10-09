@@ -1,0 +1,72 @@
+
+
+directive @key(fields: String!) on OBJECT | INTERFACE
+
+directive @external on OBJECT | FIELD_DEFINITION
+
+scalar DateTime
+
+type User @key(fields: "id"){
+  # Example field (placeholder)
+  id: ID!
+  firstname: String
+  lastname: String
+  username: String
+  address: String
+  bank: String
+  refCenter: String
+  idNumber: String
+  cnamCode: String
+  prestCode:  Int
+  taxId: String
+  rib: String
+  phone: String
+  email: String
+  password: String
+  permissions: [String]
+  isActive: Boolean
+  passwordReset: String
+  passwordResetExp: DateTime
+  activationToken: String
+  activationTokenExp: DateTime
+}
+
+input CreateUserInput {
+  firstname: String
+  lastname: String
+  username: String
+  address: String
+  bank: String
+  refCenter: String
+  idNumber: String
+  cnamCode: String
+  prestCode:  Int
+  taxId: String
+  rib: String
+  phone: String
+  email: String
+  password: String
+  permissions: [String]
+  isActive: Boolean
+  passwordReset: String
+  passwordResetExp: DateTime
+  activationToken: String
+  activationTokenExp: DateTime
+}
+
+input UpdateUserInput {
+  firstname: String
+  lastname: String
+  email: String
+}
+
+type Query {
+  users: [User]!
+  user(id: String!): User
+}
+
+type Mutation {
+  signup(createUserInput: CreateUserInput!): User!
+  updateUser(id: String!, updateUserInput: UpdateUserInput!): User!
+  removeUser(id: String!): User
+}
