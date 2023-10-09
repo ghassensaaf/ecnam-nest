@@ -8,7 +8,7 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "node dist/src/main",
     "dev": "concurrently \"npm:start:dev\" \"npm:gen-typings\" \"npx prisma generate --watch\"",
     "start:dev": "nest start --watch",
     "gen-typings": "ts-node ./src/generate-typings",
