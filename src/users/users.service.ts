@@ -32,17 +32,22 @@ export class UsersService {
           typeof error.meta.target === 'string' &&
           error.meta.target.includes('email')
         ) {
-          // This error code 'P2002' indicates a unique constraint violation.
           throw new Error(
             'Email is already in use. Please choose a different email.',
           );
+        } else if (
+          error.code === 'P2002' &&
+          typeof error.meta.target === 'string' &&
+          error.meta.target.includes('username')
+        ) {
+          throw new Error(
+            'Username is already in use. Please choose a different Username.',
+          );
         } else {
-          // Handle other Prisma-specific errors here if needed.
           console.error('Prisma error:', error.message);
           throw new Error('An error occurred while creating the user.');
         }
       } else {
-        // Handle other types of errors (e.g., database connection errors)
         console.error('Unknown error:', error);
         throw new Error('An unknown error occurred.');
       }
