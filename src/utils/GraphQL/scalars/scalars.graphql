@@ -1,0 +1,8 @@
+scalar DateTime
+
+scalar EmailAddress
+
+scalar PhoneNumber
+
+scalar NonEmptyString
+
