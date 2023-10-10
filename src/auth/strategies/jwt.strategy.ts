@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         ExtractJwt.fromAuthHeaderAsBearerToken(),
       ]),
       ignoreExpiration: false,
-      secretOrKey: 'secret',
+      secretOrKey: process.env.JWT_SECRET_KEY,
     });
   }
 
@@ -30,9 +30,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     // This is called to validate the user in the token exists
     const user = await this.authService.validateJwtPayload(payload);
     if (!user) {
-      throw new AuthenticationError(
-        'Could ********** not log-in with the provided credentials',
-      );
+      throw new AuthenticationError('Authentication failed.');
     }
 
     return user;

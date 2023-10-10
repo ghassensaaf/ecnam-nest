@@ -13,16 +13,6 @@ export class UsersResolver {
     return this.usersService.create(createUserInput);
   }
 
-  @Query('users')
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  @Query('user')
-  findOne(@Args('id') id: number) {
-    return this.usersService.findOne(id);
-  }
-
   @Mutation('updateUser')
   @UseGuards(JwtAuthGuard)
   update(
@@ -34,8 +24,34 @@ export class UsersResolver {
     return this.usersService.update({ id }, updateUserInput);
   }
 
-  @Mutation('removeUser')
-  remove(@Args('id') id: number) {
-    return this.usersService.remove(id);
+  @Mutation('activateUserAccount')
+  activateUserAccount(@Args('activationToken') activationToken: string) {
+    return this.usersService.activate({ activationToken });
+  }
+
+  @Mutation('forgotPassword')
+  forgotPassword(@Args('email') email: string) {
+    return this.usersService.forgotPassword(email);
+  }
+
+  @Mutation('resetPassword')
+  resetPassword(
+    @Args('token') token: string,
+    @Args('password') password: string,
+  ) {
+    return this.usersService.resetPassword(token, password);
+  }
+
+  @Query('findByUsername')
+  findByUsername(@Args('username') username: string) {
+    return this.usersService.findOneByUsername(username);
+  }
+
+  @Query('me')
+  @UseGuards(JwtAuthGuard)
+  async me(@Context() context: any) {
+    const { req: request } = context;
+    const id: string = request.user.id;
+    return await this.usersService.findOne({ id });
   }
 }

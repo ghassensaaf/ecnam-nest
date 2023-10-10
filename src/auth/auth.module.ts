@@ -15,10 +15,10 @@ import { PasswordUtils } from 'src/utils/password.utils';
     JwtModule.registerAsync({
       useFactory: () => {
         const options: JwtModuleOptions = {
-          secret: 'secret',
+          secret: process.env.JWT_SECRET_KEY,
         };
         options.signOptions = {
-          expiresIn: 1e22,
+          expiresIn: '1h',
         };
         return options;
       },

@@ -1,72 +1,72 @@
-
-
-directive @key(fields: String!) on OBJECT | INTERFACE
-
-directive @external on OBJECT | FIELD_DEFINITION
-
-scalar DateTime
-
 type User @key(fields: "id"){
   # Example field (placeholder)
   id: ID!
-  firstname: String
-  lastname: String
-  username: String
-  address: String
-  bank: String
-  refCenter: String
-  idNumber: String
-  cnamCode: String
+  firstname: NonEmptyString
+  lastname: NonEmptyString
+  username: NonEmptyString
+  address: NonEmptyString
+  bank: NonEmptyString
+  refCenter: NonEmptyString
+  idNumber: NonEmptyString
+  cnamCode: NonEmptyString
   prestCode:  Int
-  taxId: String
-  rib: String
-  phone: String
-  email: String
-  password: String
-  permissions: [String]
+  taxId: NonEmptyString
+  rib: NonEmptyString
+  phone: PhoneNumber
+  email: EmailAddress
+  password: NonEmptyString
+  permissions: [NonEmptyString]
   isActive: Boolean
-  passwordReset: String
+  passwordReset: NonEmptyString
   passwordResetExp: DateTime
-  activationToken: String
+  activationToken: NonEmptyString
   activationTokenExp: DateTime
 }
 
 input CreateUserInput {
-  firstname: String
-  lastname: String
-  username: String
-  address: String
-  bank: String
-  refCenter: String
-  idNumber: String
-  cnamCode: String
+  firstname: NonEmptyString
+  lastname: NonEmptyString
+  username: NonEmptyString
+  address: NonEmptyString
+  bank: NonEmptyString
+  refCenter: NonEmptyString
+  idNumber: NonEmptyString
+  cnamCode: NonEmptyString
   prestCode:  Int
-  taxId: String
-  rib: String
-  phone: String
-  email: String
-  password: String
-  permissions: [String]
+  taxId: NonEmptyString
+  rib: NonEmptyString
+  phone: PhoneNumber
+  email: EmailAddress
+  password: NonEmptyString
+  permissions: [NonEmptyString]
   isActive: Boolean
-  passwordReset: String
+  passwordReset: NonEmptyString
   passwordResetExp: DateTime
-  activationToken: String
+  activationToken: NonEmptyString
   activationTokenExp: DateTime
 }
 
 input UpdateUserInput {
-  firstname: String
-  lastname: String
-  email: String
+  firstname: NonEmptyString
+  lastname: NonEmptyString
+  email: EmailAddress
+}
+
+input UpdatePasswordInput {
+  oldPassword: NonEmptyString!
+  password: NonEmptyString!
 }
 
 type Query {
-  users: [User]!
-  user(id: String!): User
+  findByUsername(username:NonEmptyString!):User
+  me: User
 }
 
 type Mutation {
   signup(createUserInput: CreateUserInput!): User!
-  updateUser(id: String!, updateUserInput: UpdateUserInput!): User!
-  removeUser(id: String!): User
+  updateUser(id: NonEmptyString!, updateUserInput: UpdateUserInput!): User!
+  activateUserAccount(activationToken: NonEmptyString!): User!
+  forgotPassword(email: EmailAddress!): User!
+  resetPassword(token: NonEmptyString!, password: NonEmptyString!): User!
+  updatePassword(updatePasswordInput: UpdatePasswordInput): NonEmptyString!
 }

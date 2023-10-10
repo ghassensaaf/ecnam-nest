@@ -15,7 +15,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   handleRequest(err: any, user: any) {
     if (err || !user) {
-      throw err || new AuthenticationError('Could not authenticate with token');
+      throw err || new AuthenticationError('Authentication failed.');
     }
     return user;
   }

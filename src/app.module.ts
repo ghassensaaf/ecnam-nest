@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { GraphQLISODateTime, GraphQLModule } from '@nestjs/graphql';
-import {
-  ApolloFederationDriver,
-  ApolloFederationDriverConfig,
-  ApolloDriver,
-  ApolloDriverConfig,
-} from '@nestjs/apollo';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { AuthModule } from './auth/auth.module';
-
+import {
+  DateTimeResolver,
+  EmailAddressResolver,
+  NonEmptyStringResolver,
+  PhoneNumberResolver,
+} from 'graphql-scalars';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -18,7 +18,10 @@ import { AuthModule } from './auth/auth.module';
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       typePaths: ['./**/*.graphql'],
       resolvers: {
-        DateTime: GraphQLISODateTime,
+        DateTime: DateTimeResolver,
+        EmailAddress: EmailAddressResolver,
+        PhoneNumber: PhoneNumberResolver,
+        NonEmptyString: NonEmptyStringResolver,
       },
       subscriptions: {
         'graphql-ws': true,

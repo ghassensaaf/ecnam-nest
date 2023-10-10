@@ -15,40 +15,45 @@ export class LoginUserInput {
 }
 
 export class CreateUserInput {
-    firstname?: Nullable<string>;
-    lastname?: Nullable<string>;
-    username?: Nullable<string>;
-    address?: Nullable<string>;
-    bank?: Nullable<string>;
-    refCenter?: Nullable<string>;
-    idNumber?: Nullable<string>;
-    cnamCode?: Nullable<string>;
+    firstname?: Nullable<NonEmptyString>;
+    lastname?: Nullable<NonEmptyString>;
+    username?: Nullable<NonEmptyString>;
+    address?: Nullable<NonEmptyString>;
+    bank?: Nullable<NonEmptyString>;
+    refCenter?: Nullable<NonEmptyString>;
+    idNumber?: Nullable<NonEmptyString>;
+    cnamCode?: Nullable<NonEmptyString>;
     prestCode?: Nullable<number>;
-    taxId?: Nullable<string>;
-    rib?: Nullable<string>;
-    phone?: Nullable<string>;
-    email?: Nullable<string>;
-    password?: Nullable<string>;
-    permissions?: Nullable<Nullable<string>[]>;
+    taxId?: Nullable<NonEmptyString>;
+    rib?: Nullable<NonEmptyString>;
+    phone?: Nullable<PhoneNumber>;
+    email?: Nullable<EmailAddress>;
+    password?: Nullable<NonEmptyString>;
+    permissions?: Nullable<Nullable<NonEmptyString>[]>;
     isActive?: Nullable<boolean>;
-    passwordReset?: Nullable<string>;
+    passwordReset?: Nullable<NonEmptyString>;
     passwordResetExp?: Nullable<DateTime>;
-    activationToken?: Nullable<string>;
+    activationToken?: Nullable<NonEmptyString>;
     activationTokenExp?: Nullable<DateTime>;
 }
 
 export class UpdateUserInput {
-    firstname?: Nullable<string>;
-    lastname?: Nullable<string>;
-    email?: Nullable<string>;
+    firstname?: Nullable<NonEmptyString>;
+    lastname?: Nullable<NonEmptyString>;
+    email?: Nullable<EmailAddress>;
+}
+
+export class UpdatePasswordInput {
+    oldPassword: NonEmptyString;
+    password: NonEmptyString;
 }
 
 export abstract class IQuery {
     abstract refreshToken(): string | Promise<string>;
 
-    abstract users(): Nullable<User>[] | Promise<Nullable<User>[]>;
+    abstract findByUsername(username: NonEmptyString): Nullable<User> | Promise<Nullable<User>>;
 
-    abstract user(id: string): Nullable<User> | Promise<Nullable<User>>;
+    abstract me(): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export abstract class IMutation {
@@ -58,9 +63,15 @@ export abstract class IMutation {
 
     abstract signup(createUserInput: CreateUserInput): User | Promise<User>;
 
-    abstract updateUser(id: string, updateUserInput: UpdateUserInput): User | Promise<User>;
+    abstract updateUser(id: NonEmptyString, updateUserInput: UpdateUserInput): User | Promise<User>;
 
-    abstract removeUser(id: string): Nullable<User> | Promise<Nullable<User>>;
+    abstract activateUserAccount(activationToken: NonEmptyString): User | Promise<User>;
+
+    abstract forgotPassword(email: EmailAddress): User | Promise<User>;
+
+    abstract resetPassword(token: NonEmptyString, password: NonEmptyString): User | Promise<User>;
+
+    abstract updatePassword(updatePasswordInput?: Nullable<UpdatePasswordInput>): NonEmptyString | Promise<NonEmptyString>;
 }
 
 export class LoginResult {
@@ -70,28 +81,30 @@ export class LoginResult {
 
 export class User {
     id: string;
-    firstname?: Nullable<string>;
-    lastname?: Nullable<string>;
-    username?: Nullable<string>;
-    address?: Nullable<string>;
-    bank?: Nullable<string>;
-    refCenter?: Nullable<string>;
-    idNumber?: Nullable<string>;
-    cnamCode?: Nullable<string>;
+    firstname?: Nullable<NonEmptyString>;
+    lastname?: Nullable<NonEmptyString>;
+    username?: Nullable<NonEmptyString>;
+    address?: Nullable<NonEmptyString>;
+    bank?: Nullable<NonEmptyString>;
+    refCenter?: Nullable<NonEmptyString>;
+    idNumber?: Nullable<NonEmptyString>;
+    cnamCode?: Nullable<NonEmptyString>;
     prestCode?: Nullable<number>;
-    taxId?: Nullable<string>;
-    rib?: Nullable<string>;
-    phone?: Nullable<string>;
-    email?: Nullable<string>;
-    password?: Nullable<string>;
-    permissions?: Nullable<Nullable<string>[]>;
+    taxId?: Nullable<NonEmptyString>;
+    rib?: Nullable<NonEmptyString>;
+    phone?: Nullable<PhoneNumber>;
+    email?: Nullable<EmailAddress>;
+    password?: Nullable<NonEmptyString>;
+    permissions?: Nullable<Nullable<NonEmptyString>[]>;
     isActive?: Nullable<boolean>;
-    passwordReset?: Nullable<string>;
+    passwordReset?: Nullable<NonEmptyString>;
     passwordResetExp?: Nullable<DateTime>;
-    activationToken?: Nullable<string>;
+    activationToken?: Nullable<NonEmptyString>;
     activationTokenExp?: Nullable<DateTime>;
 }
 
 export type EmailAddress = any;
 export type DateTime = any;
+export type PhoneNumber = any;
+export type NonEmptyString = any;
 type Nullable<T> = T | null;
