@@ -1,0 +1,46 @@
+enum Quality {
+  HIMSELF
+  SPOUSE
+  SON
+  MOTHER
+  FATHER
+}
+
+type Patient @key(fields: "id") {
+  id: ID!
+  firstname: String
+  lastname: String
+  assured: Boolean
+  quality: Quality
+  userId: String
+  insuredId: String
+  insured: Insured
+  user: User
+}
+
+input CreatePatientInput {
+  firstname: String!
+  lastname: String!
+  assured: Boolean
+  quality: Quality
+  insuredId: String
+}
+
+input UpdatePatientInput {
+  firstname: String
+  lastname: String
+  assured: Boolean
+  quality: Quality
+  insuredId: String
+}
+
+type Query {
+  patient(id: String):Patient!
+  userPatients: [Patient]
+}
+
+type Mutation {
+  createPatient(createPatientInput: CreatePatientInput): Patient!
+  updatePatient(id: String, updatePatientInput: UpdatePatientInput): Patient!
+}
+

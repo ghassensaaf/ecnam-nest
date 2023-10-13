@@ -10,6 +10,8 @@ import {
   NonEmptyStringResolver,
   PhoneNumberResolver,
 } from 'graphql-scalars';
+import { PatientsModule } from './patients/patients.module';
+import { InsuredsModule } from './insureds/insureds.module';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -45,6 +47,8 @@ import {
     // }),
     UsersModule,
     AuthModule,
+    PatientsModule,
+    InsuredsModule,
   ],
 })
 export class AppModule {}

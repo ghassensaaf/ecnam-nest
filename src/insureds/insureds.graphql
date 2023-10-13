@@ -1,0 +1,29 @@
+type Insured @key(fields: "id") {
+  id: ID!
+  firstname: String
+  lastname: String
+  insuredNumber: String
+  patients: [Patient]
+  userId: String
+  user: User
+}
+
+input CreateInsuredInput {
+  firstname: String
+  lastname: String
+  insuredNumber: String
+}
+
+input UpdateInsuredInput {
+  firstname: String
+  lastname: String
+  insuredNumber: String
+}
+
+
+
+type Mutation {
+  createInsured(createInsuredInput: CreateInsuredInput): Insured!
+  updateInsured(id: String, updateInsuredInput: UpdateInsuredInput): Insured!
+  removeInsured(id: String): Insured
+}

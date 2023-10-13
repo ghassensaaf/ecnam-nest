@@ -4,6 +4,7 @@ import { PrismaService } from 'prisma/prisma.service';
 import { UpdatePasswordInput } from 'src/graphql';
 import { PasswordUtils } from 'src/utils/password.utils';
 import { v4 as uuid } from 'uuid';
+import { CreateUserInput } from './dto/create-user.input';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +13,7 @@ export class UsersService {
     private passwordUtils: PasswordUtils,
   ) {}
 
-  async create(createUserInput: Prisma.UserCreateInput) {
+  async create(createUserInput: CreateUserInput) {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     try {
@@ -64,6 +65,27 @@ export class UsersService {
     }
   }
 
+  async update(
+    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
+    updateUserInput: Prisma.UserUpdateInput,
+  ) {
+    try {
+      const updatedUser = await this.prisma.user.update({
+        where: userWhereUniqueInput,
+        data: updateUserInput,
+      });
+      return updatedUser;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        console.error('Prisma error:', error.message);
+        throw new Error('An error occurred while creating the user.');
+      } else {
+        console.error('Unknown error:', error);
+        throw new Error('An unknown error occurred.');
+      }
+    }
+  }
+
   async findOneByEmail(email: string) {
     try {
       const user = await this.prisma.user.findFirst({
@@ -90,27 +112,6 @@ export class UsersService {
       });
     } catch (error) {
       throw error; // Re-throw the original error
-    }
-  }
-
-  async update(
-    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-    updateUserInput: Prisma.UserUpdateInput,
-  ) {
-    try {
-      const updatedUser = await this.prisma.user.update({
-        where: userWhereUniqueInput,
-        data: updateUserInput,
-      });
-      return updatedUser;
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        console.error('Prisma error:', error.message);
-        throw new Error('An error occurred while creating the user.');
-      } else {
-        console.error('Unknown error:', error);
-        throw new Error('An unknown error occurred.');
-      }
     }
   }
 

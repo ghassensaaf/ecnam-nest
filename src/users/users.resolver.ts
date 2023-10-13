@@ -1,15 +1,28 @@
-import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Context,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { UsersService } from './users.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UseGuards } from '@nestjs/common';
+import { CreateUserInput } from './dto/create-user.input';
+import { PrismaService } from 'prisma/prisma.service';
 
 @Resolver('User')
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly prisma: PrismaService,
+  ) {}
 
   @Mutation('signup')
-  signup(@Args('createUserInput') createUserInput: Prisma.UserCreateInput) {
+  signup(@Args('createUserInput') createUserInput: CreateUserInput) {
     return this.usersService.create(createUserInput);
   }
 
@@ -53,5 +66,12 @@ export class UsersResolver {
     const { req: request } = context;
     const id: string = request.user.id;
     return await this.usersService.findOne({ id });
+  }
+
+  @ResolveField('patients')
+  async patients(@Parent() user: User) {
+    return this.prisma.patient.findMany({
+      where: { userId: user.id },
+    });
   }
 }

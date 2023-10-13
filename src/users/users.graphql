@@ -12,7 +12,7 @@ type User @key(fields: "id"){
   prestCode:  Int
   taxId: NonEmptyString
   rib: NonEmptyString
-  phone: PhoneNumber
+  phone: NonEmptyString
   email: EmailAddress
   password: NonEmptyString
   permissions: [NonEmptyString]
@@ -21,6 +21,8 @@ type User @key(fields: "id"){
   passwordResetExp: DateTime
   activationToken: NonEmptyString
   activationTokenExp: DateTime
+  insureds: [Insured]
+  patients: [Patient]
 }
 
 input CreateUserInput {
@@ -35,7 +37,7 @@ input CreateUserInput {
   prestCode:  Int
   taxId: NonEmptyString
   rib: NonEmptyString
-  phone: PhoneNumber
+  phone: NonEmptyString
   email: EmailAddress
   password: NonEmptyString
   permissions: [NonEmptyString]

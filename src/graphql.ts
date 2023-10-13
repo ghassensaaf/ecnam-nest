@@ -8,10 +8,46 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export enum Quality {
+    HIMSELF = "HIMSELF",
+    SPOUSE = "SPOUSE",
+    SON = "SON",
+    MOTHER = "MOTHER",
+    FATHER = "FATHER"
+}
+
 export class LoginUserInput {
     username?: Nullable<string>;
     email?: Nullable<EmailAddress>;
     password: string;
+}
+
+export class CreateInsuredInput {
+    firstname?: Nullable<string>;
+    lastname?: Nullable<string>;
+    insuredNumber?: Nullable<string>;
+}
+
+export class UpdateInsuredInput {
+    firstname?: Nullable<string>;
+    lastname?: Nullable<string>;
+    insuredNumber?: Nullable<string>;
+}
+
+export class CreatePatientInput {
+    firstname: string;
+    lastname: string;
+    assured?: Nullable<boolean>;
+    quality?: Nullable<Quality>;
+    insuredId?: Nullable<string>;
+}
+
+export class UpdatePatientInput {
+    firstname?: Nullable<string>;
+    lastname?: Nullable<string>;
+    assured?: Nullable<boolean>;
+    quality?: Nullable<Quality>;
+    insuredId?: Nullable<string>;
 }
 
 export class CreateUserInput {
@@ -26,7 +62,7 @@ export class CreateUserInput {
     prestCode?: Nullable<number>;
     taxId?: Nullable<NonEmptyString>;
     rib?: Nullable<NonEmptyString>;
-    phone?: Nullable<PhoneNumber>;
+    phone?: Nullable<NonEmptyString>;
     email?: Nullable<EmailAddress>;
     password?: Nullable<NonEmptyString>;
     permissions?: Nullable<Nullable<NonEmptyString>[]>;
@@ -51,6 +87,10 @@ export class UpdatePasswordInput {
 export abstract class IQuery {
     abstract refreshToken(): string | Promise<string>;
 
+    abstract patient(id?: Nullable<string>): Patient | Promise<Patient>;
+
+    abstract userPatients(): Nullable<Nullable<Patient>[]> | Promise<Nullable<Nullable<Patient>[]>>;
+
     abstract findByUsername(username: NonEmptyString): Nullable<User> | Promise<Nullable<User>>;
 
     abstract me(): Nullable<User> | Promise<Nullable<User>>;
@@ -60,6 +100,16 @@ export abstract class IMutation {
     abstract login(user: LoginUserInput): Nullable<LoginResult> | Promise<Nullable<LoginResult>>;
 
     abstract logout(): Nullable<boolean> | Promise<Nullable<boolean>>;
+
+    abstract createInsured(createInsuredInput?: Nullable<CreateInsuredInput>): Insured | Promise<Insured>;
+
+    abstract updateInsured(id?: Nullable<string>, updateInsuredInput?: Nullable<UpdateInsuredInput>): Insured | Promise<Insured>;
+
+    abstract removeInsured(id?: Nullable<string>): Nullable<Insured> | Promise<Nullable<Insured>>;
+
+    abstract createPatient(createPatientInput?: Nullable<CreatePatientInput>): Patient | Promise<Patient>;
+
+    abstract updatePatient(id?: Nullable<string>, updatePatientInput?: Nullable<UpdatePatientInput>): Patient | Promise<Patient>;
 
     abstract signup(createUserInput: CreateUserInput): User | Promise<User>;
 
@@ -79,6 +129,28 @@ export class LoginResult {
     token: string;
 }
 
+export class Insured {
+    id: string;
+    firstname?: Nullable<string>;
+    lastname?: Nullable<string>;
+    insuredNumber?: Nullable<string>;
+    patients?: Nullable<Nullable<Patient>[]>;
+    userId?: Nullable<string>;
+    user?: Nullable<User>;
+}
+
+export class Patient {
+    id: string;
+    firstname?: Nullable<string>;
+    lastname?: Nullable<string>;
+    assured?: Nullable<boolean>;
+    quality?: Nullable<Quality>;
+    userId?: Nullable<string>;
+    insuredId?: Nullable<string>;
+    insured?: Nullable<Insured>;
+    user?: Nullable<User>;
+}
+
 export class User {
     id: string;
     firstname?: Nullable<NonEmptyString>;
@@ -92,7 +164,7 @@ export class User {
     prestCode?: Nullable<number>;
     taxId?: Nullable<NonEmptyString>;
     rib?: Nullable<NonEmptyString>;
-    phone?: Nullable<PhoneNumber>;
+    phone?: Nullable<NonEmptyString>;
     email?: Nullable<EmailAddress>;
     password?: Nullable<NonEmptyString>;
     permissions?: Nullable<Nullable<NonEmptyString>[]>;
@@ -101,6 +173,8 @@ export class User {
     passwordResetExp?: Nullable<DateTime>;
     activationToken?: Nullable<NonEmptyString>;
     activationTokenExp?: Nullable<DateTime>;
+    insureds?: Nullable<Nullable<Insured>[]>;
+    patients?: Nullable<Nullable<Patient>[]>;
 }
 
 export type EmailAddress = any;

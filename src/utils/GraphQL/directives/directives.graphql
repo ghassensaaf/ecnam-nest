@@ -1,3 +1,5 @@
 directive @key(fields: String!) on OBJECT | INTERFACE
 
 directive @external on OBJECT | FIELD_DEFINITION
+
+directive @Directive on OBJECT | FIELD_DEFINITION
