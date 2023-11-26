@@ -40,6 +40,7 @@ export class AuthService {
         loginAttempt.username,
       );
     }
+    if (!userToAttempt) throw new Error('user not found');
     // Check the supplied password against the hash stored for this email address
     let isMatch = false;
     try {
@@ -64,7 +65,7 @@ export class AuthService {
           { updatedAt: new Date() },
         );
         return result;
-      } else throw new Error('user not active, activate your account first');
+      } else throw new Error('user not active');
     }
     return null;
   }
