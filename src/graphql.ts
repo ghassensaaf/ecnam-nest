@@ -87,7 +87,7 @@ export class UpdatePasswordInput {
 export abstract class IQuery {
     abstract refreshToken(): string | Promise<string>;
 
-    abstract patient(id?: Nullable<string>): Patient | Promise<Patient>;
+    abstract patient(id?: Nullable<string>): Nullable<Patient> | Promise<Nullable<Patient>>;
 
     abstract userPatients(): Nullable<Nullable<Patient>[]> | Promise<Nullable<Nullable<Patient>[]>>;
 
